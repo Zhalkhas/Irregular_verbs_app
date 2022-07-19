@@ -1,46 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:irregularverbs/db_helper.dart';
-import 'package:irregularverbs/main.dart';
+import 'package:irregularverbs/data/db_helper.dart';
+import 'package:irregularverbs/ui/home_page.dart';
 
 class Wordlist extends StatelessWidget {
   final List<Verb> list;
 
-  Wordlist({Key key, @required this.list}) {
-    this.list.sort((a, b) => a.infinitive.compareTo(b.infinitive));
+  Wordlist({Key key, @required this.list}) : super(key: key) {
+    list.sort((a, b) => a.infinitive.compareTo(b.infinitive));
   }
 
-  TextStyle _style() {
-    return TextStyle(
-      color: Colors.black,
-      fontStyle: FontStyle.normal,
-      fontSize: 20,
-    );
-  }
+  TextStyle get _style => const TextStyle(
+        color: Colors.black,
+        fontStyle: FontStyle.normal,
+        fontSize: 20,
+      );
 
   List<DataRow> _rows() {
-    List<DataRow> rows = List<DataRow>();
+    List<DataRow> rows = <DataRow>[];
 
-    list.forEach((element) {
+    for (var element in list) {
       rows.add(DataRow(cells: [
         DataCell(Text(
           element.infinitive,
-          style: _style(),
+          style: _style,
         )),
         DataCell(Text(
           element.past,
-          style: _style(),
+          style: _style,
         )),
         DataCell(Text(
           element.participle,
-          style: _style(),
+          style: _style,
         )),
         DataCell(Text(
           element.translation,
-          style: _style(),
+          style: _style,
         )),
       ]));
-    });
+    }
     return rows;
   }
 
@@ -52,35 +49,37 @@ class Wordlist extends StatelessWidget {
             children: <Widget>[
               Card(
                 child: ListTile(
-                  leading: FlutterLogo(),
+                  leading: const FlutterLogo(),
                   title: Text(
                     'Irregular verbs',
-                    style: _style(),
+                    style: _style,
                   ),
-                  subtitle: Text('Main menu'),
+                  subtitle: const Text('Main menu'),
                 ),
               ),
               Card(
                   child: ListTile(
-                leading: Icon(Icons.font_download),
+                leading: const Icon(Icons.font_download),
                 title: Text(
                   'Guess words',
-                  style: _style(),
+                  style: _style,
                 ),
-                subtitle: Text("Start guessing irregular verbs"),
+                subtitle: const Text("Start guessing irregular verbs"),
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MyHomePage()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomePage()));
                 },
               )),
               Card(
                   child: ListTile(
-                leading: Icon(Icons.reorder),
+                leading: const Icon(Icons.reorder),
                 title: Text(
                   'Wordlist',
-                  style: _style(),
+                  style: _style,
                 ),
-                subtitle: Text("List of irregular verbs"),
+                subtitle: const Text("List of irregular verbs"),
                 onTap: () {
                   Navigator.pop(context);
                 },
@@ -88,7 +87,7 @@ class Wordlist extends StatelessWidget {
             ],
           ),
         ),
-        appBar: AppBar(title: Text("Irregular verbs app")),
+        appBar: AppBar(title: const Text("Irregular verbs app")),
         body: Center(
             child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
@@ -101,27 +100,27 @@ class Wordlist extends StatelessWidget {
                                 alignment: Alignment.center,
                                 child: Text(
                                   "Infinitive",
-                                  style: _style(),
+                                  style: _style,
                                 ))),
                         DataColumn(
                           label: Center(
                               child: Text(
                             "Past",
-                            style: _style(),
+                            style: _style,
                           )),
                         ),
                         DataColumn(
                           label: Center(
                               child: Text(
                             "Participle",
-                            style: _style(),
+                            style: _style,
                           )),
                         ),
                         DataColumn(
                           label: Center(
                               child: Text(
                             "Translation",
-                            style: _style(),
+                            style: _style,
                           )),
                         )
                       ],

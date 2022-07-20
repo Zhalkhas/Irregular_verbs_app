@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:irregularverbs/data/verbs_db.dart';
-import 'package:irregularverbs/screen/home_page.dart';
 import 'package:irregularverbs/widget/verbs_list_notifier.dart';
+import 'package:irregularverbs/widget/bottom_navbar.dart';
 
 class Wordlist extends StatelessWidget {
   const Wordlist({Key? key}) : super(key: key);
@@ -12,118 +11,73 @@ class Wordlist extends StatelessWidget {
         fontSize: 20,
       );
 
-  List<DataRow> _rows(List<Verb> verbs) {
-    List<DataRow> rows = <DataRow>[];
-
-    for (var verb in verbs) {
-      rows.add(DataRow(cells: [
-        DataCell(Text(
-          verb.infinitive,
-          style: _style,
-        )),
-        DataCell(Text(
-          verb.past,
-          style: _style,
-        )),
-        DataCell(Text(
-          verb.participle,
-          style: _style,
-        )),
-        DataCell(Text(
-          verb.translation,
-          style: _style,
-        )),
-      ]));
-    }
-    return rows;
-  }
-
   @override
   Widget build(BuildContext context) {
     final verbs = VerbsListNotifier.verbsListOf(context);
     return Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            Card(
-              child: ListTile(
-                leading: const FlutterLogo(),
-                title: Text(
-                  'Irregular verbs',
-                  style: _style,
-                ),
-                subtitle: const Text('Main menu'),
-              ),
-            ),
-            Card(
-                child: ListTile(
-              leading: const Icon(Icons.font_download),
-              title: Text(
-                'Guess words',
-                style: _style,
-              ),
-              subtitle: const Text("Start guessing irregular verbs"),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const HomePage()));
-              },
-            )),
-            Card(
-                child: ListTile(
-              leading: const Icon(Icons.reorder),
-              title: Text(
-                'Wordlist',
-                style: _style,
-              ),
-              subtitle: const Text("List of irregular verbs"),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ))
-          ],
-        ),
-      ),
+      bottomNavigationBar: const BottomNavbar(),
       appBar: AppBar(title: const Text("Irregular verbs app")),
-      body: Center(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: FittedBox(
-            fit: BoxFit.fitWidth,
-            child: DataTable(
-              columns: [
-                DataColumn(
-                    label: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Infinitive",
-                          style: _style,
-                        ))),
-                DataColumn(
-                  label: Center(
+      body: Column(
+        children: [
+          Material(
+            elevation: 1,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Row(
+                children: [
+                  Center(
+                    child: Text(
+                      "Infinitive",
+                      style: _style,
+                    ),
+                  ),
+                  Center(
                       child: Text(
                     "Past",
                     style: _style,
                   )),
-                ),
-                DataColumn(
-                  label: Center(
+                  Center(
                       child: Text(
                     "Participle",
                     style: _style,
                   )),
-                ),
-                DataColumn(
-                  label: Center(
+                  Center(
                       child: Text(
                     "Translation",
                     style: _style,
                   )),
-                )
-              ],
-              rows: _rows(verbs),
+                ].map((e) => Expanded(child: e)).toList(),
+              ),
             ),
           ),
-        ),
+          Expanded(
+            child: ListView.separated(
+              separatorBuilder: (context, index) => const Divider(),
+              itemCount: verbs.length,
+              itemBuilder: (context, index) {
+                final verb = verbs[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
+                    children: [
+                      verb.infinitive,
+                      verb.past,
+                      verb.participle,
+                      verb.translation
+                    ]
+                        .map((e) => Expanded(
+                                child: Center(
+                                    child: Text(
+                              e,
+                              textAlign: TextAlign.center,
+                            ))))
+                        .toList(),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

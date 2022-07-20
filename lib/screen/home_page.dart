@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:irregularverbs/screen/wordslist.dart';
+import 'package:irregularverbs/widget/bottom_navbar.dart';
 import 'package:irregularverbs/widget/verbs_list_notifier.dart';
 
 class HomePage extends StatefulWidget {
@@ -37,6 +37,7 @@ class _HomePageState extends State<HomePage> {
         pastController.text = "";
         participleController.text = "";
         tries = 0;
+        index++;
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -75,50 +76,8 @@ class _HomePageState extends State<HomePage> {
       ));
     } else {
       return Scaffold(
-          drawer: Drawer(
-            child: ListView(
-              children: <Widget>[
-                Card(
-                  child: ListTile(
-                    leading: const FlutterLogo(),
-                    title: Text(
-                      'Irregular verbs',
-                      style: _style(),
-                    ),
-                    subtitle: const Text('Main menu'),
-                  ),
-                ),
-                Card(
-                    child: ListTile(
-                  leading: const Icon(Icons.font_download),
-                  title: Text(
-                    'Guess words',
-                    style: _style(),
-                  ),
-                  subtitle: const Text("Start guessing irregular verbs"),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                )),
-                Card(
-                    child: ListTile(
-                  leading: const Icon(Icons.reorder),
-                  title: Text(
-                    'Wordlist',
-                    style: _style(),
-                  ),
-                  subtitle: const Text("List of irregular verbs"),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const Wordlist()));
-                  },
-                ))
-              ],
-            ),
-          ),
           appBar: AppBar(title: const Text("Irregular verbs app")),
+          bottomNavigationBar: const BottomNavbar(),
           body: Builder(builder: (context) {
             final verbs = VerbsListNotifier.verbsListOf(context);
             return Padding(
@@ -147,7 +106,9 @@ class _HomePageState extends State<HomePage> {
                                           flex: 2,
                                           child: Center(
                                             child: Text(
-                                              verbs[index % verbs.length]
+                                              verbs[verbs.isNotEmpty
+                                                      ? index % verbs.length
+                                                      : 0]
                                                   .infinitive,
                                               style: _style(),
                                             ),

@@ -10,8 +10,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int index = 0;
-  int tries = 0;
   final infinitiveController = TextEditingController();
   final pastController = TextEditingController();
   final participleController = TextEditingController();
@@ -33,17 +31,13 @@ class _HomePageState extends State<HomePage> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Right! Go on!"),
       ));
-      setState(() {
-        pastController.text = "";
-        participleController.text = "";
-        tries = 0;
-        index++;
-      });
+      pastController.text = "";
+      participleController.text = "";
+      VerbsListNotifier.loadNextVerbOf(context);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Wrong! Try again!"),
       ));
-      tries++;
     }
   }
 
@@ -79,7 +73,7 @@ class _HomePageState extends State<HomePage> {
           appBar: AppBar(title: const Text("Irregular verbs app")),
           bottomNavigationBar: const BottomNavbar(),
           body: Builder(builder: (context) {
-            final verbs = VerbsListNotifier.verbsListOf(context);
+            final verb = VerbsListNotifier.currentVerbOf(context);
             return Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Card(
@@ -106,10 +100,7 @@ class _HomePageState extends State<HomePage> {
                                           flex: 2,
                                           child: Center(
                                             child: Text(
-                                              verbs[verbs.isNotEmpty
-                                                      ? index % verbs.length
-                                                      : 0]
-                                                  .infinitive,
+                                              verb.infinitive,
                                               style: _style(),
                                             ),
                                           ))
@@ -132,8 +123,6 @@ class _HomePageState extends State<HomePage> {
                                         flex: 2,
                                         child: TextFormField(
                                           validator: (input) {
-                                            final verb =
-                                                verbs[index % verbs.length];
                                             return verb.past ==
                                                     input?.toLowerCase()
                                                 ? null
@@ -167,8 +156,6 @@ class _HomePageState extends State<HomePage> {
                                         flex: 2,
                                         child: TextFormField(
                                           validator: (input) {
-                                            final verb =
-                                                verbs[index % verbs.length];
                                             return verb.participle ==
                                                     input?.toLowerCase()
                                                 ? null

@@ -31,4 +31,18 @@ class VerbsListNotifier extends InheritedNotifier<VerbsListModel> {
       inhW.notifier?.loadVerbs();
     }
   }
+
+  static void loadNextVerbOf(BuildContext context) {
+    final inhW = context
+        .getElementForInheritedWidgetOfExactType<VerbsListNotifier>()
+        ?.widget;
+    if (inhW is VerbsListNotifier) {
+      inhW.notifier?.nextVerb();
+    }
+  }
+
+  static Verb currentVerbOf(BuildContext context) => (context
+      .dependOnInheritedWidgetOfExactType<VerbsListNotifier>()
+      ?.notifier
+      ?.currentVerb)!;
 }

@@ -27,6 +27,16 @@ class VerbsListModel with ChangeNotifier {
   Future<void> loadVerbs() async {
     isLoading = true;
     verbs = await db.allVerbs;
+    _currentVerbIndex = 0;
     isLoading = false;
   }
+
+  int _currentVerbIndex = 0;
+
+  void nextVerb() {
+    _currentVerbIndex = (_currentVerbIndex + 1) % verbs.length;
+    notifyListeners();
+  }
+
+  Verb get currentVerb => verbs[_currentVerbIndex];
 }

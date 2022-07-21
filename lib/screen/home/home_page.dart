@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:irregularverbs/screen/home/submit_button.dart';
+import 'package:irregularverbs/screen/home/verb_input_field.dart';
 import 'package:irregularverbs/widget/bottom_navbar.dart';
 import 'package:irregularverbs/widget/verbs_list_notifier.dart';
 
@@ -10,13 +12,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final infinitiveController = TextEditingController();
   final pastController = TextEditingController();
   final participleController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
-    // Clean up the controller when the widget is disposed.
+    infinitiveController.dispose();
     pastController.dispose();
     participleController.dispose();
     super.dispose();
@@ -75,39 +78,23 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    ColumnCardTile(
-                      title: 'Infinitive',
-                      body: Center(
-                        child: Text(
-                          verb.infinitive,
-                          style: _style,
-                        ),
-                      ),
+                    VerbInputField(
+                      label: 'Infnitive',
+                      controller: infinitiveController,
+                      readOnly: true,
+                      initialValue: verb.infinitive,
                     ),
-                    ColumnCardTile(
-                      title: 'Past:',
-                      body: TextFormField(
-                        validator: (input) {
-                          return verb.past == input?.toLowerCase() ? null : '';
-                        },
-                        decoration: inputDecoration.copyWith(hintText: 'Past'),
-                        controller: pastController,
-                        style: _style,
-                      ),
+                    VerbInputField(
+                      label: 'Past',
+                      controller: pastController,
+                      validator: (input) =>
+                          verb.past == input?.toLowerCase() ? null : '',
                     ),
-                    ColumnCardTile(
-                      title: 'Participle:',
-                      body: TextFormField(
-                        validator: (input) {
-                          return verb.participle == input?.toLowerCase()
-                              ? null
-                              : '';
-                        },
-                        decoration:
-                            inputDecoration.copyWith(hintText: 'Participle'),
-                        controller: participleController,
-                        style: _style,
-                      ),
+                    VerbInputField(
+                      label: 'Participle',
+                      controller: participleController,
+                      validator: (input) =>
+                          verb.participle == input?.toLowerCase() ? null : '',
                     ),
                     Center(
                       child: SubmitButton(onPressed: () => _onClick(context)),
@@ -120,60 +107,5 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     }
-  }
-}
-
-class ColumnCardTile extends StatelessWidget {
-  final String title;
-  final Widget body;
-
-  const ColumnCardTile({
-    Key? key,
-    required this.title,
-    required this.body,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final style = Theme.of(context).textTheme.titleLarge;
-    return Row(
-      children: <Widget>[
-        Expanded(
-            child: Text(
-          title,
-          style: style,
-        )),
-        Expanded(flex: 2, child: body)
-      ],
-    );
-  }
-}
-
-class SubmitButton extends StatelessWidget {
-  final VoidCallback onPressed;
-
-  const SubmitButton({
-    Key? key,
-    required this.onPressed,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Ink(
-      decoration: const ShapeDecoration(
-        color: Colors.lightBlue,
-        shape: CircleBorder(),
-      ),
-      child: IconButton(
-        onPressed: onPressed,
-        icon: const Icon(
-          Icons.navigate_next,
-          color: Colors.white,
-        ),
-        tooltip: 'Submit',
-        iconSize: 80,
-        // onPressed: () => _onClick(context),
-      ),
-    );
   }
 }

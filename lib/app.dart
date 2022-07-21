@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:irregularverbs/data/verbs_db.dart';
 import 'package:irregularverbs/data/verbs_list_model.dart';
-import 'package:irregularverbs/screen/home_page.dart';
+import 'package:irregularverbs/screen/home/home_page.dart';
 import 'package:irregularverbs/screen/wordslist.dart';
 import 'package:irregularverbs/widget/verbs_list_notifier.dart';
 
